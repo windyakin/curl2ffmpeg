@@ -1,0 +1,19 @@
+{
+  "name": "curl2ffmpeg",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.10.1",
+    "bootstrap": "^5.1.1",
+    "commander": "^8.2.0",
+    "vue": "^3.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.0",
+    "vite": "^2.4"
+  }
+}
