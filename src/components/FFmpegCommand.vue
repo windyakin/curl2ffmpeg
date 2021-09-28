@@ -2,7 +2,7 @@
   <div>
     <div class="monospace">
       ffmpeg
-      -headers
+      <span v-if="headers.length > 0">-headers </span>
       <span v-for="(header, index) in headers" :key="index">'{{ header }}'<span v-if="headers.length - 1 !== index">$'\r\n'</span></span>
       -i '{{ url }}'
       -c copy
