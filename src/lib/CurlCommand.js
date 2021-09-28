@@ -28,8 +28,8 @@ export default class CurlCommand {
         if (/^curl$/.test(current)) {
           return accumulator
         }
-        if (/^['"]https?:\/\/.*$/.test(current)) {
-          this.url = current.replace(/^['"](.+)['"]$/, '$1')
+        if (/^['"]?https?:\/\/.*$/.test(current)) {
+          this.url = current.replace(/^['"]/, '').replace(/['"]$/, '')
           return accumulator
         }
         if (/^-H$/.test(current)) {
