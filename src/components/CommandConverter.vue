@@ -45,6 +45,8 @@ export default {
   },
   methods: {
     parseCommand() {
+      this.url = ''
+      this.headers = ''
       if (!this.command) {
         return
       }
