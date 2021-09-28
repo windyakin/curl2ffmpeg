@@ -5,7 +5,7 @@
         <form acton="#" @submit.prevent="parseCommand">
           <div class="mb-3">
             <label for="command" class="form-label">cURL command</label>
-            <textarea v-model="command" id="command" class="form-control monospace" rows="12" />
+            <textarea v-model="command" id="command" class="form-control monospace" rows="10" />
           </div>
             <label for="command" class="form-label">Output file name</label>
           <div class="mb-3">
