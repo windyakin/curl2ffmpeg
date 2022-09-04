@@ -1,4 +1,4 @@
-const p$1 = function polyfill() {
+(function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
     return;
@@ -38,8 +38,7 @@ const p$1 = function polyfill() {
     const fetchOpts = getFetchOpts(link);
     fetch(link.href, fetchOpts);
   }
-};
-p$1();
+})();
 function makeMap(str, expectsLowerCase) {
   const map = /* @__PURE__ */ Object.create(null);
   const list = str.split(",");
@@ -4854,7 +4853,7 @@ class CurlCommand {
     }
   }
 }
-var _export_sfc = (sfc, props) => {
+const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
     target[key] = val;
@@ -4896,8 +4895,8 @@ function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
     ])
   ]);
 }
-var FFMpegCommand = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2]]);
-var CommandConverter_vue_vue_type_style_index_0_lang = "";
+const FFMpegCommand = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["render", _sfc_render$2]]);
+const CommandConverter_vue_vue_type_style_index_0_lang = "";
 const _sfc_main$1 = {
   components: {
     FFMpegCommand
@@ -4992,7 +4991,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     ])) : createCommentVNode("", true)
   ]);
 }
-var CommandCoverter = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
+const CommandCoverter = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
 const _sfc_main = {
   components: {
     CommandCoverter
@@ -5019,8 +5018,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     _hoisted_6
   ]);
 }
-var App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
-var bootstrap_min = "";
+const App = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+const bootstrap_min = "";
 var top = "top";
 var bottom = "bottom";
 var right = "right";
@@ -5135,7 +5134,7 @@ function effect$2(_ref2) {
     });
   };
 }
-var applyStyles$1 = {
+const applyStyles$1 = {
   name: "applyStyles",
   enabled: true,
   phase: "write",
@@ -5357,7 +5356,7 @@ function effect$1(_ref2) {
   }
   state.elements.arrow = arrowElement;
 }
-var arrow$1 = {
+const arrow$1 = {
   name: "arrow",
   enabled: true,
   phase: "main",
@@ -5476,7 +5475,7 @@ function computeStyles(_ref5) {
     "data-popper-placement": state.placement
   });
 }
-var computeStyles$1 = {
+const computeStyles$1 = {
   name: "computeStyles",
   enabled: true,
   phase: "beforeWrite",
@@ -5510,7 +5509,7 @@ function effect(_ref) {
     }
   };
 }
-var eventListeners = {
+const eventListeners = {
   name: "eventListeners",
   enabled: true,
   phase: "write",
@@ -5881,7 +5880,7 @@ function flip(_ref) {
     state.reset = true;
   }
 }
-var flip$1 = {
+const flip$1 = {
   name: "flip",
   enabled: true,
   phase: "main",
@@ -5936,7 +5935,7 @@ function hide(_ref) {
     "data-popper-escaped": hasPopperEscaped
   });
 }
-var hide$1 = {
+const hide$1 = {
   name: "hide",
   enabled: true,
   phase: "main",
@@ -5973,7 +5972,7 @@ function offset(_ref2) {
   }
   state.modifiersData[name] = data;
 }
-var offset$1 = {
+const offset$1 = {
   name: "offset",
   enabled: true,
   phase: "main",
@@ -5989,7 +5988,7 @@ function popperOffsets(_ref) {
     placement: state.placement
   });
 }
-var popperOffsets$1 = {
+const popperOffsets$1 = {
   name: "popperOffsets",
   enabled: true,
   phase: "read",
@@ -6083,7 +6082,7 @@ function preventOverflow(_ref) {
   }
   state.modifiersData[name] = data;
 }
-var preventOverflow$1 = {
+const preventOverflow$1 = {
   name: "preventOverflow",
   enabled: true,
   phase: "main",
@@ -6346,7 +6345,7 @@ var defaultModifiers = [eventListeners, popperOffsets$1, computeStyles$1, applyS
 var createPopper = /* @__PURE__ */ popperGenerator({
   defaultModifiers
 });
-var Popper = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Popper = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   popperGenerator,
   detectOverflow,
@@ -9955,4 +9954,4 @@ class Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 createApp(App).mount("#app");
-//# sourceMappingURL=index.e5a56cef.js.map
+//# sourceMappingURL=index.02f4249a.js.map
