@@ -7,13 +7,13 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@popperjs/core": "2.10.1",
-    "bootstrap": "5.1.1",
-    "commander": "8.2.0",
-    "vue": "3.2.19"
+    "@popperjs/core": "2.11.6",
+    "bootstrap": "5.2.0",
+    "commander": "8.3.0",
+    "vue": "3.2.38"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "1.9.2",
-    "vite": "2.9.13"
+    "@vitejs/plugin-vue": "1.10.2",
+    "vite": "2.9.15"
   }
 }
