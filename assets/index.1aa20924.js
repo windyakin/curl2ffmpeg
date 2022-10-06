@@ -6375,7 +6375,7 @@ const Popper = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   preventOverflow: preventOverflow$1
 }, Symbol.toStringTag, { value: "Module" }));
 /*!
-  * Bootstrap v5.2.1 (https://getbootstrap.com/)
+  * Bootstrap v5.2.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -6908,7 +6908,7 @@ class Config {
     }
   }
 }
-const VERSION = "5.2.1";
+const VERSION = "5.2.2";
 class BaseComponent extends Config {
   constructor(element, config) {
     super();
@@ -7752,7 +7752,7 @@ class Dropdown extends BaseComponent {
     super(element, config);
     this._popper = null;
     this._parent = this._element.parentNode;
-    this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0];
+    this._menu = SelectorEngine.next(this._element, SELECTOR_MENU)[0] || SelectorEngine.prev(this._element, SELECTOR_MENU)[0] || SelectorEngine.findOne(SELECTOR_MENU, this._parent);
     this._inNavbar = this._detectNavbar();
   }
   static get Default() {
@@ -7977,7 +7977,7 @@ class Dropdown extends BaseComponent {
       return;
     }
     event.preventDefault();
-    const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0];
+    const getToggleButton = this.matches(SELECTOR_DATA_TOGGLE$3) ? this : SelectorEngine.prev(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.next(this, SELECTOR_DATA_TOGGLE$3)[0] || SelectorEngine.findOne(SELECTOR_DATA_TOGGLE$3, event.delegateTarget.parentNode);
     const instance = Dropdown.getOrCreateInstance(getToggleButton);
     if (isUpOrDownEvent) {
       event.stopPropagation();
@@ -8399,7 +8399,7 @@ class Modal extends BaseComponent {
     });
     EventHandler.on(this._element, EVENT_MOUSEDOWN_DISMISS, (event) => {
       EventHandler.one(this._element, EVENT_CLICK_DISMISS, (event2) => {
-        if (this._dialog.contains(event.target) || this._dialog.contains(event2.target)) {
+        if (this._element !== event.target || this._element !== event2.target) {
           return;
         }
         if (this._config.backdrop === "static") {
@@ -8959,6 +8959,9 @@ class Tooltip extends BaseComponent {
     this._newContent = null;
     this.tip = null;
     this._setListeners();
+    if (!this._config.selector) {
+      this._fixTitle();
+    }
   }
   static get Default() {
     return Default$3;
@@ -8978,20 +8981,11 @@ class Tooltip extends BaseComponent {
   toggleEnabled() {
     this._isEnabled = !this._isEnabled;
   }
-  toggle(event) {
+  toggle() {
     if (!this._isEnabled) {
       return;
     }
-    if (event) {
-      const context = this._initializeOnDelegatedTarget(event);
-      context._activeTrigger.click = !context._activeTrigger.click;
-      if (context._isWithActiveTrigger()) {
-        context._enter();
-      } else {
-        context._leave();
-      }
-      return;
-    }
+    this._activeTrigger.click = !this._activeTrigger.click;
     if (this._isShown()) {
       this._leave();
       return;
@@ -9004,8 +8998,8 @@ class Tooltip extends BaseComponent {
     if (this.tip) {
       this.tip.remove();
     }
-    if (this._config.originalTitle) {
-      this._element.setAttribute("title", this._config.originalTitle);
+    if (this._element.getAttribute("data-bs-original-title")) {
+      this._element.setAttribute("title", this._element.getAttribute("data-bs-original-title"));
     }
     this._disposePopper();
     super.dispose();
@@ -9141,7 +9135,7 @@ class Tooltip extends BaseComponent {
     };
   }
   _getTitle() {
-    return this._resolvePossibleFunction(this._config.title) || this._config.originalTitle;
+    return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute("data-bs-original-title");
   }
   _initializeOnDelegatedTarget(event) {
     return this.constructor.getOrCreateInstance(event.delegateTarget, this._getDelegateConfig());
@@ -9213,7 +9207,10 @@ class Tooltip extends BaseComponent {
     const triggers = this._config.trigger.split(" ");
     for (const trigger2 of triggers) {
       if (trigger2 === "click") {
-        EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, (event) => this.toggle(event));
+        EventHandler.on(this._element, this.constructor.eventName(EVENT_CLICK$1), this._config.selector, (event) => {
+          const context = this._initializeOnDelegatedTarget(event);
+          context.toggle();
+        });
       } else if (trigger2 !== TRIGGER_MANUAL) {
         const eventIn = trigger2 === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSEENTER) : this.constructor.eventName(EVENT_FOCUSIN$1);
         const eventOut = trigger2 === TRIGGER_HOVER ? this.constructor.eventName(EVENT_MOUSELEAVE) : this.constructor.eventName(EVENT_FOCUSOUT$1);
@@ -9235,24 +9232,16 @@ class Tooltip extends BaseComponent {
       }
     };
     EventHandler.on(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-    if (this._config.selector) {
-      this._config = {
-        ...this._config,
-        trigger: "manual",
-        selector: ""
-      };
-    } else {
-      this._fixTitle();
-    }
   }
   _fixTitle() {
-    const title = this._config.originalTitle;
+    const title = this._element.getAttribute("title");
     if (!title) {
       return;
     }
     if (!this._element.getAttribute("aria-label") && !this._element.textContent.trim()) {
       this._element.setAttribute("aria-label", title);
     }
+    this._element.setAttribute("data-bs-original-title", title);
     this._element.removeAttribute("title");
   }
   _enter() {
@@ -9309,7 +9298,6 @@ class Tooltip extends BaseComponent {
         hide: config.delay
       };
     }
-    config.originalTitle = this._element.getAttribute("title") || "";
     if (typeof config.title === "number") {
       config.title = config.title.toString();
     }
@@ -9325,6 +9313,8 @@ class Tooltip extends BaseComponent {
         config[key] = this._config[key];
       }
     }
+    config.selector = false;
+    config.trigger = "manual";
     return config;
   }
   _disposePopper() {
@@ -9619,7 +9609,6 @@ const CLASS_NAME_SHOW$1 = "show";
 const CLASS_DROPDOWN = "dropdown";
 const SELECTOR_DROPDOWN_TOGGLE = ".dropdown-toggle";
 const SELECTOR_DROPDOWN_MENU = ".dropdown-menu";
-const SELECTOR_DROPDOWN_ITEM = ".dropdown-item";
 const NOT_SELECTOR_DROPDOWN_TOGGLE = ":not(.dropdown-toggle)";
 const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
 const SELECTOR_OUTER = ".nav-item, .list-group-item";
@@ -9669,7 +9658,6 @@ class Tab extends BaseComponent {
         element.classList.add(CLASS_NAME_SHOW$1);
         return;
       }
-      element.focus();
       element.removeAttribute("tabindex");
       element.setAttribute("aria-selected", true);
       this._toggleDropDown(element, true);
@@ -9709,6 +9697,9 @@ class Tab extends BaseComponent {
     const isNext = [ARROW_RIGHT_KEY, ARROW_DOWN_KEY].includes(event.key);
     const nextActiveElement = getNextActiveElement(this._getChildren().filter((element) => !isDisabled(element)), event.target, isNext, true);
     if (nextActiveElement) {
+      nextActiveElement.focus({
+        preventScroll: true
+      });
       Tab.getOrCreateInstance(nextActiveElement).show();
     }
   }
@@ -9761,7 +9752,6 @@ class Tab extends BaseComponent {
     };
     toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE);
     toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW$1);
-    toggle(SELECTOR_DROPDOWN_ITEM, CLASS_NAME_ACTIVE);
     outerElem.setAttribute("aria-expanded", open);
   }
   _setAttributeIfNotExists(element, attribute, value) {
@@ -9907,13 +9897,15 @@ class Toast extends BaseComponent {
   _onInteraction(event, isInteracting) {
     switch (event.type) {
       case "mouseover":
-      case "mouseout":
+      case "mouseout": {
         this._hasMouseInteraction = isInteracting;
         break;
+      }
       case "focusin":
-      case "focusout":
+      case "focusout": {
         this._hasKeyboardInteraction = isInteracting;
         break;
+      }
     }
     if (isInteracting) {
       this._clearTimeout();
@@ -9950,4 +9942,4 @@ class Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 createApp(App).mount("#app");
-//# sourceMappingURL=index.220cf64d.js.map
+//# sourceMappingURL=index.1aa20924.js.map
