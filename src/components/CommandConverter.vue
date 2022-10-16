@@ -2,7 +2,7 @@
   <div>
     <div class="card my-4">
       <div class="card-body">
-        <form acton="#" @submit.prevent="parseCommand">
+        <form acton="#" @submit.prevent="submit">
           <div class="mb-3">
             <label for="command" class="form-label">cURL command</label>
             <textarea v-model="command" id="command" class="form-control monospace" rows="10" />
@@ -17,12 +17,7 @@
     </div>
 
     <div v-if="url">
-      <div class="card bg-secondary text-white">
-        <div class="card-header">Result</div>
-        <div class="card-body">
-          <FFMpegCommand :url="url" :headers="headers" :filename="filename" />
-        </div>
-      </div>
+      <FFMpegCommand :url="url" :headers="headers" :filename="filename" />
     </div>
   </div>
 </template>
@@ -44,7 +39,7 @@ export default {
     };
   },
   methods: {
-    parseCommand() {
+    submit() {
       this.url = ''
       this.headers = ''
       if (!this.command) {
