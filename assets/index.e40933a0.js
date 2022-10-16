@@ -4863,23 +4863,52 @@ const _sfc_main$2 = {
       type: String,
       required: true
     }
+  },
+  methods: {
+    async copy() {
+      await navigator.clipboard.writeText(this.$refs.command.textContent.trim());
+    }
   }
 };
-const _hoisted_1$2 = { class: "monospace" };
-const _hoisted_2$2 = { key: 0 };
-const _hoisted_3$2 = { key: 0 };
+const _hoisted_1$2 = { class: "card bg-secondary text-white" };
+const _hoisted_2$2 = { class: "card-header" };
+const _hoisted_3$2 = { class: "d-flex align-items-center" };
+const _hoisted_4$2 = /* @__PURE__ */ createBaseVNode("div", { class: "" }, "Result", -1);
+const _hoisted_5$2 = { class: "ms-auto m-n1" };
+const _hoisted_6$2 = { class: "card-body" };
+const _hoisted_7$1 = {
+  ref: "command",
+  class: "monospace"
+};
+const _hoisted_8$1 = { key: 0 };
+const _hoisted_9 = { key: 0 };
 function _sfc_render$2(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createElementBlock("div", null, [
     createBaseVNode("div", _hoisted_1$2, [
-      createTextVNode(" ffmpeg "),
-      $props.headers.length > 0 ? (openBlock(), createElementBlock("span", _hoisted_2$2, "-headers ")) : createCommentVNode("", true),
-      (openBlock(true), createElementBlock(Fragment, null, renderList($props.headers, (header, index) => {
-        return openBlock(), createElementBlock("span", { key: index }, [
-          createTextVNode("'" + toDisplayString(header) + "'", 1),
-          $props.headers.length - 1 !== index ? (openBlock(), createElementBlock("span", _hoisted_3$2, "$'\\r\\n'")) : createCommentVNode("", true)
-        ]);
-      }), 128)),
-      createTextVNode(" -i '" + toDisplayString($props.url) + "' -c copy " + toDisplayString($props.filename), 1)
+      createBaseVNode("div", _hoisted_2$2, [
+        createBaseVNode("div", _hoisted_3$2, [
+          _hoisted_4$2,
+          createBaseVNode("div", _hoisted_5$2, [
+            createBaseVNode("button", {
+              class: "btn btn-sm btn-outline-light",
+              onClick: _cache[0] || (_cache[0] = (...args) => $options.copy && $options.copy(...args))
+            }, " Copy ")
+          ])
+        ])
+      ]),
+      createBaseVNode("div", _hoisted_6$2, [
+        createBaseVNode("div", _hoisted_7$1, [
+          createTextVNode(" ffmpeg "),
+          $props.headers.length > 0 ? (openBlock(), createElementBlock("span", _hoisted_8$1, "-headers ")) : createCommentVNode("", true),
+          (openBlock(true), createElementBlock(Fragment, null, renderList($props.headers, (header, index) => {
+            return openBlock(), createElementBlock("span", { key: index }, [
+              createTextVNode("'" + toDisplayString(header) + "'", 1),
+              $props.headers.length - 1 !== index ? (openBlock(), createElementBlock("span", _hoisted_9, "$'\\r\\n'")) : createCommentVNode("", true)
+            ]);
+          }), 128)),
+          createTextVNode(" -i '" + toDisplayString($props.url) + "' -c copy '" + toDisplayString($props.filename) + "' ", 1)
+        ], 512)
+      ])
     ])
   ]);
 }
@@ -4898,7 +4927,7 @@ const _sfc_main$1 = {
     };
   },
   methods: {
-    parseCommand() {
+    submit() {
       this.url = "";
       this.headers = "";
       if (!this.command) {
@@ -4927,9 +4956,6 @@ const _hoisted_7 = /* @__PURE__ */ createBaseVNode("button", {
   class: "btn btn-primary"
 }, "Convert", -1);
 const _hoisted_8 = { key: 0 };
-const _hoisted_9 = { class: "card bg-secondary text-white" };
-const _hoisted_10 = /* @__PURE__ */ createBaseVNode("div", { class: "card-header" }, "Result", -1);
-const _hoisted_11 = { class: "card-body" };
 function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FFMpegCommand = resolveComponent("FFMpegCommand");
   return openBlock(), createElementBlock("div", null, [
@@ -4937,7 +4963,7 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       createBaseVNode("div", _hoisted_2$1, [
         createBaseVNode("form", {
           acton: "#",
-          onSubmit: _cache[2] || (_cache[2] = withModifiers((...args) => $options.parseCommand && $options.parseCommand(...args), ["prevent"]))
+          onSubmit: _cache[2] || (_cache[2] = withModifiers((...args) => $options.submit && $options.submit(...args), ["prevent"]))
         }, [
           createBaseVNode("div", _hoisted_3$1, [
             _hoisted_4$1,
@@ -4966,16 +4992,11 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       ])
     ]),
     $data.url ? (openBlock(), createElementBlock("div", _hoisted_8, [
-      createBaseVNode("div", _hoisted_9, [
-        _hoisted_10,
-        createBaseVNode("div", _hoisted_11, [
-          createVNode(_component_FFMpegCommand, {
-            url: $data.url,
-            headers: $data.headers,
-            filename: $data.filename
-          }, null, 8, ["url", "headers", "filename"])
-        ])
-      ])
+      createVNode(_component_FFMpegCommand, {
+        url: $data.url,
+        headers: $data.headers,
+        filename: $data.filename
+      }, null, 8, ["url", "headers", "filename"])
     ])) : createCommentVNode("", true)
   ]);
 }
@@ -9942,4 +9963,4 @@ class Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 createApp(App).mount("#app");
-//# sourceMappingURL=index.1aa20924.js.map
+//# sourceMappingURL=index.e40933a0.js.map
