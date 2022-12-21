@@ -8,11 +8,11 @@ export default defineConfig({
   base: '/curl2ffmpeg/',
   build: {
     sourcemap: true,
-    minify: false,
+    minify: 'terser',
   },
   resolve: {
     alias: {
-      "~": resolve(__dirname, "src"),
+      '~': resolve(__dirname, 'src'),
     },
   },
-})
+});
