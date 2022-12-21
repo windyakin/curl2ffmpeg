@@ -6425,7 +6425,7 @@ const Popper = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   preventOverflow: preventOverflow$1
 }, Symbol.toStringTag, { value: "Module" }));
 /*!
-  * Bootstrap v5.2.2 (https://getbootstrap.com/)
+  * Bootstrap v5.2.3 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -6958,7 +6958,7 @@ class Config {
     }
   }
 }
-const VERSION = "5.2.2";
+const VERSION = "5.2.3";
 class BaseComponent extends Config {
   constructor(element, config) {
     super();
@@ -9045,9 +9045,6 @@ class Tooltip extends BaseComponent {
   dispose() {
     clearTimeout(this._timeout);
     EventHandler.off(this._element.closest(SELECTOR_MODAL), EVENT_MODAL_HIDE, this._hideModalHandler);
-    if (this.tip) {
-      this.tip.remove();
-    }
     if (this._element.getAttribute("data-bs-original-title")) {
       this._element.setAttribute("title", this._element.getAttribute("data-bs-original-title"));
     }
@@ -9067,10 +9064,7 @@ class Tooltip extends BaseComponent {
     if (showEvent.defaultPrevented || !isInTheDom) {
       return;
     }
-    if (this.tip) {
-      this.tip.remove();
-      this.tip = null;
-    }
+    this._disposePopper();
     const tip = this._getTipElement();
     this._element.setAttribute("aria-describedby", tip.getAttribute("id"));
     const {
@@ -9080,11 +9074,7 @@ class Tooltip extends BaseComponent {
       container.append(tip);
       EventHandler.trigger(this._element, this.constructor.eventName(EVENT_INSERTED));
     }
-    if (this._popper) {
-      this._popper.update();
-    } else {
-      this._popper = this._createPopper(tip);
-    }
+    this._popper = this._createPopper(tip);
     tip.classList.add(CLASS_NAME_SHOW$2);
     if ("ontouchstart" in document.documentElement) {
       for (const element of [].concat(...document.body.children)) {
@@ -9124,11 +9114,10 @@ class Tooltip extends BaseComponent {
         return;
       }
       if (!this._isHovered) {
-        tip.remove();
+        this._disposePopper();
       }
       this._element.removeAttribute("aria-describedby");
       EventHandler.trigger(this._element, this.constructor.eventName(EVENT_HIDDEN$2));
-      this._disposePopper();
     };
     this._queueCallback(complete, this.tip, this._isAnimated());
   }
@@ -9371,6 +9360,10 @@ class Tooltip extends BaseComponent {
     if (this._popper) {
       this._popper.destroy();
       this._popper = null;
+    }
+    if (this.tip) {
+      this.tip.remove();
+      this.tip = null;
     }
   }
   static jQueryInterface(config) {
@@ -9992,4 +9985,4 @@ class Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 createApp(App).mount("#app");
-//# sourceMappingURL=index.0a4fa6f6.js.map
+//# sourceMappingURL=index.9c8a8537.js.map
