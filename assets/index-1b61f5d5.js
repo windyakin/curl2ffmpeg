@@ -5041,7 +5041,7 @@ const _hoisted_3 = { class: "col col-12 col-lg-8" };
 const _hoisted_4 = /* @__PURE__ */ createBaseVNode("h1", null, "curl2ffmpeg", -1);
 const _hoisted_5 = /* @__PURE__ */ createBaseVNode("a", { href: "https://github.com/windyakin/curl2ffmpeg" }, "GitHub Repository", -1);
 const _hoisted_6 = /* @__PURE__ */ createBaseVNode("div", { class: "row justify-content-center my-4" }, [
-  /* @__PURE__ */ createBaseVNode("div", { class: "col col-12 col-lg-8 text-end" }, " \xA9 2021 windyakin ")
+  /* @__PURE__ */ createBaseVNode("div", { class: "col col-12 col-lg-8 text-end" }, " © 2021 windyakin ")
 ], -1);
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CommandCoverter = resolveComponent("CommandCoverter");
@@ -9985,4 +9985,4 @@ class Toast extends BaseComponent {
 enableDismissTrigger(Toast);
 defineJQueryPlugin(Toast);
 createApp(App).mount("#app");
-//# sourceMappingURL=index.9c8a8537.js.map
+//# sourceMappingURL=index-1b61f5d5.js.map
