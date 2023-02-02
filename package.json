@@ -9,11 +9,11 @@
   "dependencies": {
     "@popperjs/core": "2.11.6",
     "bootstrap": "5.2.3",
-    "vue": "3.2.45"
+    "vue": "3.2.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "4.0.0",
     "terser": "^5.16.1",
-    "vite": "4.0.4"
+    "vite": "4.1.1"
   }
 }
