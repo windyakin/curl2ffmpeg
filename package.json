@@ -12,7 +12,7 @@
     "vue": "3.4.19"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "4.6.2",
+    "@vitejs/plugin-vue": "5.0.4",
     "terser": "^5.16.1",
     "vite": "5.1.3"
   }
