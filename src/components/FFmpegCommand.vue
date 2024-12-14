@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
+
 export default {
   props: {
     url: {
@@ -34,29 +36,37 @@ export default {
     },
     headers: {
       type: Array,
-      default: []
+      default: () => []
     },
     filename: {
       type: String,
       required: true
     }
   },
-  data() {
-    return {
-      copyButtonText: 'Copy',
-      coppyButtonDisabled: false
-    }
-  },
-  methods: {
-    async copy() {
-      await navigator.clipboard.writeText(this.$refs.command.textContent.trim())
-      this.copyButtonText = 'Copied!'
-      this.coppyButtonDisabled = true
+  setup(props) {
+    const copyButtonText = ref('Copy');
+    const coppyButtonDisabled = ref(false);
+    const command = ref(null);
+
+    const copy = async () => {
+      await navigator.clipboard.writeText(command.value.textContent.trim());
+      copyButtonText.value = '✓ Copied';
+      coppyButtonDisabled.value = true;
       setTimeout(() => {
-        this.copyButtonText = 'Copy'
-        this.coppyButtonDisabled = false
-      }, 1000)
-    }
+        copyButtonText.value = 'Copy';
+        coppyButtonDisabled.value = false;
+      }, 500);
+    };
+
+    return {
+      copyButtonText,
+      coppyButtonDisabled,
+      command,
+      copy,
+      headers: computed(() => props.headers),
+      url: computed(() => props.url),
+      filename: computed(() => props.filename)
+    };
   }
-}
+};
 </script>

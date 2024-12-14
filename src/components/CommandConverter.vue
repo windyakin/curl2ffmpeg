@@ -23,34 +23,40 @@
 </template>
 
 <script>
-import CurlCommand from '~/lib/CurlCommand.js'
-import FFMpegCommand from '~/components/FFmpegCommand.vue'
+import { ref } from 'vue';
+import CurlCommand from '~/lib/CurlCommand.js';
+import FFMpegCommand from '~/components/FFmpegCommand.vue';
 
 export default {
   components: {
     FFMpegCommand
   },
-  data() {
-    return {
-      command: '',
-      url: '',
-      headers: [],
-      filename: 'movie.mp4'
-    };
-  },
-  methods: {
-    submit() {
-      this.url = ''
-      this.headers = ''
-      if (!this.command) {
-        return
+  setup() {
+    const command = ref('');
+    const url = ref('');
+    const headers = ref([]);
+    const filename = ref('movie.mp4');
+
+    const submit = () => {
+      url.value = '';
+      headers.value = '';
+      if (!command.value) {
+        return;
       }
-      const curlCommand = new CurlCommand(this.command.trim());
-      this.url = curlCommand.url;
-      this.headers = curlCommand.headers;
-    }
+      const curlCommand = new CurlCommand(command.value.trim());
+      url.value = curlCommand.url;
+      headers.value = curlCommand.headers;
+    };
+
+    return {
+      command,
+      url,
+      headers,
+      filename,
+      submit
+    };
   }
-}
+};
 </script>
 
 <style>
