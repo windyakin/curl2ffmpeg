@@ -5,8 +5,8 @@
         <div class="d-flex align-items-center">
           <div class="">Result</div>
           <div class="ms-auto m-n1">
-            <button class="btn btn-sm btn-outline-light" v-on:click="copy">
-              Copy
+            <button class="btn btn-sm btn-outline-light" v-on:click="copy" :disabled="coppyButtonDisabled">
+              {{ copyButtonText }}
             </button>
           </div>
         </div>
@@ -41,9 +41,21 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      copyButtonText: 'Copy',
+      coppyButtonDisabled: false
+    }
+  },
   methods: {
     async copy() {
       await navigator.clipboard.writeText(this.$refs.command.textContent.trim())
+      this.copyButtonText = 'Copied!'
+      this.coppyButtonDisabled = true
+      setTimeout(() => {
+        this.copyButtonText = 'Copy'
+        this.coppyButtonDisabled = false
+      }, 1000)
     }
   }
 }
