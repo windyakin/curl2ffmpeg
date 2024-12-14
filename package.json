@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "2.11.8",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.0",
     "terser": "^5.16.1",
-    "vite": "5.4.11"
+    "vite": "5.4.11",
+    "vitest": "^2.1.8"
   }
 }
