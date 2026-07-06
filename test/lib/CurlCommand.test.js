@@ -85,9 +85,66 @@ describe('CurlCommand', () => {
   });
 
   it('should skip values of other value-taking options', () => {
-    const command = new CurlCommand(`curl -X GET -b 'key=value' -A 'Mozilla/5.0' 'https://example.com/a.m3u8'`);
+    const command = new CurlCommand(`curl -X GET -x 'http://proxy.example.com:8080/' 'https://example.com/a.m3u8'`);
     expect(command.url).toBe('https://example.com/a.m3u8');
     expect(command.headers).toEqual([]);
+  });
+
+  it('should convert -b to a Cookie header', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -b 'session=abc123; user=windyakin'`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual(['Cookie: session=abc123; user=windyakin']);
+  });
+
+  it('should merge multiple cookie options into one Cookie header', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' --cookie 'a=1' --cookie=b=2`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual(['Cookie: a=1; b=2']);
+  });
+
+  it('should ignore -b with a cookie jar filename', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -b cookies.txt`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual([]);
+  });
+
+  it('should convert -e to a Referer header', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -e 'https://referrer.example.com/'`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual(['Referer: https://referrer.example.com/']);
+  });
+
+  it('should strip the ;auto suffix from -e values', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -e 'https://referrer.example.com/;auto'`);
+    expect(command.headers).toEqual(['Referer: https://referrer.example.com/']);
+    const autoOnly = new CurlCommand(`curl 'https://example.com/a.m3u8' -e ';auto'`);
+    expect(autoOnly.headers).toEqual([]);
+  });
+
+  it('should convert -A to a User-Agent header, last option winning', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -A 'Mozilla/5.0' --user-agent 'Mozilla/5.0 (Macintosh)'`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual(['User-Agent: Mozilla/5.0 (Macintosh)']);
+  });
+
+  it('should prefer -H headers over option-derived headers', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' -H 'Cookie: from_h=1' -b 'from_b=2'`);
+    expect(command.headers).toEqual(['Cookie: from_h=1']);
+    const caseInsensitive = new CurlCommand(`curl 'https://example.com/a.m3u8' -H 'user-agent: CustomUA' -A 'Mozilla/5.0'`);
+    expect(caseInsensitive.headers).toEqual(['user-agent: CustomUA']);
+  });
+
+  it('should parse a Chrome-style command with -b and -H together', () => {
+    const command = new CurlCommand(`curl 'https://example.com/a.m3u8' \\
+  -H 'Referer: https://example.com/' \\
+  -b 'session=abc123' \\
+  -H 'User-Agent: Mozilla/5.0'`);
+    expect(command.url).toBe('https://example.com/a.m3u8');
+    expect(command.headers).toEqual([
+      'Referer: https://example.com/',
+      'User-Agent: Mozilla/5.0',
+      'Cookie: session=abc123',
+    ]);
   });
 
   it('should unquote shell quote concatenation inside header values', () => {
