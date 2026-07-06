@@ -36,6 +36,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
+          overwrite: true
 
       - id: deployment
         uses: actions/deploy-pages@v5
