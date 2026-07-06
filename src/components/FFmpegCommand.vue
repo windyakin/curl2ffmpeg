@@ -12,14 +12,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div ref="command" class="monospace">
-          ffmpeg
-          <span v-if="headers.length > 0">-headers </span>
-          <span v-for="(header, index) in headers" :key="index">'{{ header }}'<span v-if="headers.length - 1 !== index">$'\r\n'</span></span>
-          -i '{{ url }}'
-          -c copy
-          '{{ filename }}'
-        </div>
+        <div class="monospace">{{ commandText }}</div>
       </div>
     </div>
   </div>
@@ -27,6 +20,7 @@
 
 <script>
 import { ref, computed } from 'vue';
+import FFmpegCommand from '~/lib/FFmpegCommand.js';
 
 export default {
   props: {
@@ -46,10 +40,11 @@ export default {
   setup(props) {
     const copyButtonText = ref('Copy');
     const coppyButtonDisabled = ref(false);
-    const command = ref(null);
+
+    const commandText = computed(() => new FFmpegCommand(props.url, props.headers, props.filename).toString());
 
     const copy = async () => {
-      await navigator.clipboard.writeText(command.value.textContent.trim());
+      await navigator.clipboard.writeText(commandText.value);
       copyButtonText.value = '✓ Copied';
       coppyButtonDisabled.value = true;
       setTimeout(() => {
@@ -61,11 +56,8 @@ export default {
     return {
       copyButtonText,
       coppyButtonDisabled,
-      command,
       copy,
-      headers: computed(() => props.headers),
-      url: computed(() => props.url),
-      filename: computed(() => props.filename)
+      commandText
     };
   }
 };
