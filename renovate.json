@@ -3,6 +3,7 @@
   "extends": [
     "config:base"
   ],
+  "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies", "dependencies"],
